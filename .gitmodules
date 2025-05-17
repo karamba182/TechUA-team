@@ -1,0 +1,8 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/ita-social-projects/TeachUAClient
+	branch = develop
+[submodule "backend"]
+	path = backend
+	url = https://github.com/ita-social-projects/TeachUA
+	branch = rest
