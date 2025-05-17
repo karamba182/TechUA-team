@@ -1,0 +1,9 @@
+ai_reviewer:
+  enabled: true
+  branches:
+    - main
+    - dev
+  comments: true
+  review_comment_style: friendly
+  language: en
+  approve_pull_requests: false
