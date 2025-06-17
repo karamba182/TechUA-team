@@ -1,0 +1,13 @@
+all:
+  vars:
+    key_vault_uri: "https://yura-kv-dev3.vault.azure.net/"
+    postgres_fqdn: "yura-postgres-server-dev182.postgres.database.azure.com"
+  hosts:
+    frontend:
+      ansible_host: 52.169.29.247
+      ansible_user: azureuser
+      private_ip: 10.0.1.4
+    backend:
+      ansible_host: 52.169.24.228
+      ansible_user: azureuser
+      private_ip: 10.0.1.5
