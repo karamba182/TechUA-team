@@ -128,3 +128,13 @@ Now, when everything is ready, we can start the nginx server:
 ```
 sudo systemctl start nginx
 ```
+
+For details about using HashiCorp Vault in this project, see the
+
+
+
+
+##  HashiCorp Vault
+
+[HashiCorp Vault Integration](https://github.com/karamba182/TeachUA-team/wiki/HashiCorp-Vault-Integration)
+

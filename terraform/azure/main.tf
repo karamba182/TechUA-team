@@ -121,7 +121,7 @@ resource "azurerm_linux_virtual_machine" "frontend_vm" {
 
   admin_ssh_key {
     username   = var.admin_username
-    public_key = var.ssh_public_key
+    public_key = data.hcp_vault_secrets_secret.ssh_public_key.secret_value
   }
 
   disable_password_authentication = true
@@ -149,7 +149,7 @@ resource "azurerm_linux_virtual_machine" "backend_vm" {
 
   admin_ssh_key {
     username   = var.admin_username
-    public_key = var.ssh_public_key
+    public_key = data.hcp_vault_secrets_secret.ssh_public_key.secret_value
   }
 
   disable_password_authentication = true
@@ -191,7 +191,7 @@ resource "azurerm_key_vault_access_policy" "current_user" {
 
 resource "azurerm_key_vault_secret" "ssh_key" {
   name         = "ssh-public-key"
-  value        = var.ssh_public_key
+  value = data.hcp_vault_secrets_secret.ssh_public_key.secret_value
   key_vault_id = azurerm_key_vault.main.id
 
   depends_on = [azurerm_key_vault_access_policy.current_user]
@@ -206,11 +206,11 @@ resource "azurerm_key_vault_secret" "db_pass" {
 }
 
 resource "azurerm_postgresql_flexible_server" "main" {
-  name                   = var.postgres_server_name
+  name                    = var.postgres_server_name
   resource_group_name     = azurerm_resource_group.main.name
   location                = var.location
   administrator_login     = var.postgres_admin_user
-  administrator_password  = var.postgres_admin_password
+  administrator_password  = data.hcp_vault_secrets_secret.postgres_admin_password.secret_value
   sku_name                = "B_Standard_B1ms"
   storage_mb              = 32768
   version                 = "15"

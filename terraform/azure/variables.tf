@@ -9,7 +9,7 @@ variable "key_vault_name" {
   default = "yura-keyvault"
 }
 variable "db_password" {
-  default = "SuperSecure123!"  # або передай через tfvars
+  default = "SuperSecure123!"
 }
 variable "postgres_server_name" {}
 variable "postgres_admin_user" {}
