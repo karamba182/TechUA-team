@@ -1,0 +1,12 @@
+- hosts: backend
+  become: true
+  roles:
+    - common
+    - backend
+
+- hosts: frontend
+  become: true
+  roles:
+    - common
+    - frontend
+    - nginx
