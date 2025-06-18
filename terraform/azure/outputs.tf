@@ -1,23 +1,34 @@
+output "public_ips" {
+  description = "Map of Public IPs for all VMs"
+  value       = module.vm.public_ips
+}
+
+# Окремо Frontend Public IP
 output "frontend_public_ip" {
-  value = azurerm_public_ip.frontend_ip.ip_address
+  description = "Public IP of the frontend VM"
+  value       = module.vm.public_ips["frontend"]
 }
 
+# Окремо Backend Public IP
 output "backend_public_ip" {
-  value = azurerm_public_ip.backend_ip.ip_address
+  description = "Public IP of the backend VM"
+  value       = module.vm.public_ips["backend"]
 }
 
+# Всі приватні IP як мапа
+output "private_ips" {
+  description = "Map of Private IPs for all VMs"
+  value       = module.vm.private_ips
+}
+
+# Окремо Frontend Private IP
 output "frontend_private_ip" {
-  value = azurerm_network_interface.frontend_nic.private_ip_address
+  description = "Private IP of the frontend VM"
+  value       = module.vm.private_ips["frontend"]
 }
 
+# Окремо Backend Private IP
 output "backend_private_ip" {
-  value = azurerm_network_interface.backend_nic.private_ip_address
+  description = "Private IP of the backend VM"
+  value       = module.vm.private_ips["backend"]
 }
-
-output "key_vault_uri" {
-  value = azurerm_key_vault.main.vault_uri
-}
-
-output "postgres_fqdn" {
-  value = azurerm_postgresql_flexible_server.main.fqdn
-}    
