@@ -67,6 +67,9 @@ resource "azurerm_public_ip" "frontend_ip" {
    resource_group_name = azurerm_resource_group.main.name
   allocation_method   = "Static"
   sku                 = "Basic"
+  dns_settings {
+    domain_name_label = "${var.project_name}-frontend"
+  }
   depends_on = [azurerm_resource_group.main]
 }
 
@@ -76,6 +79,9 @@ resource "azurerm_public_ip" "backend_ip" {
    resource_group_name = azurerm_resource_group.main.name
   allocation_method   = "Static"
   sku                 = "Basic"
+  dns_settings {
+    domain_name_label = "${var.project_name}-backend"
+  }
   depends_on = [azurerm_resource_group.main]
 
 }
