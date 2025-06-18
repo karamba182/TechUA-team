@@ -1,4 +1,4 @@
-- name: deploy frontend app
+- name: Deploy frontend app
   hosts: frontend
   become: yes
 
@@ -6,16 +6,19 @@
     - var.yml
 
   tasks:
-    - name: ensure required packages are installed
+    - name: Ensure required packages are installed
       apt:
         name:
           - git
           - nginx
           - curl
+          - software-properties-common
+          - certbot
+          - python3-certbot-nginx
         state: present
         update_cache: yes
 
-    - name: clone frontend repository
+    - name: Clone frontend repository
       git:
         repo: "{{ frontend_repo }}"
         dest: "{{ frontend_dest }}"
@@ -23,12 +26,12 @@
 
     - name: Load NVM and install Node.js v14.17.4
       shell: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          nvm install v14.17.4
-          nvm use v14.17.4
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm install v14.17.4
+        nvm use v14.17.4
       args:
-          executable: /bin/bash
+        executable: /bin/bash
 
     - name: Update .env.production (disable speak-ukrainian)
       lineinfile:
@@ -36,10 +39,11 @@
         regexp: '^.*speak-ukrainian.*$'
         line: '## speak-ukrainian=disabled'
 
-    - name: Update .env.production (enable localhost)
-      shell: sed -i '/localhost/s/^##//' .env.production
-      args:
-        chdir: "{{ frontend_dest }}"
+    - name: Update .env.production (set backend FQDN)
+      lineinfile:
+        path: "{{ frontend_dest }}/.env.production"
+        regexp: '^.*localhost.*$'
+        line: "API_URL=https://{{ backend_dns_name }}"
 
     - name: Install npm dependencies
       shell: |
@@ -67,34 +71,33 @@
 
     - name: Write nginx config
       copy:
-        dest: /etc/nginx/nginx.conf
+        dest: /etc/nginx/sites-available/default
         content: |
-          events {
-            worker_connections 1024;
-          }
+          server {
+            listen 80;
+            server_name {{ frontend_dns_name }};
 
-          http {
-            include       mime.types;
-            server {
-              listen 80;
-              root /usr/share/nginx/html;
+            root /usr/share/nginx/html;
+            index index.html index.htm;
+
+            location / {
               try_files $uri /index.html;
+            }
 
-              location /api {
-                proxy_pass http://localhost:8080;
-              }
+            location /api {
+              proxy_pass http://{{ backend_dns_name }};
+            }
 
-              location /oauth2 {
-                proxy_pass http://localhost:8080;
-              }
+            location /oauth2 {
+              proxy_pass http://{{ backend_dns_name }};
+            }
 
-              location /upload {
-                proxy_pass http://localhost:8080;
-              }
+            location /upload {
+              proxy_pass http://{{ backend_dns_name }};
+            }
 
-              location /swagger-ui {
-                proxy_pass http://localhost:8080;
-              }
+            location /swagger-ui {
+              proxy_pass http://{{ backend_dns_name }};
             }
           }
 
@@ -109,8 +112,13 @@
         group: www-data
         mode: 0755
 
-    - name: Start nginx
+    - name: Restart nginx
       systemd:
         name: nginx
-        state: started
+        state: restarted
         enabled: yes
+
+    - name: Obtain SSL certificate with certbot
+      shell: certbot --nginx -d {{ frontend_dns_name }} --non-interactive --agree-tos -m youremail@example.com
+      args:
+        creates: /etc/letsencrypt/live/{{ frontend_dns_name }}
