@@ -1,0 +1,116 @@
+- name: deploy frontend app
+  hosts: frontend
+  become: yes
+
+  vars_files:
+    - var.yml
+
+  tasks:
+    - name: ensure required packages are installed
+      apt:
+        name:
+          - git
+          - nginx
+          - curl
+        state: present
+        update_cache: yes
+
+    - name: clone frontend repository
+      git:
+        repo: "{{ frontend_repo }}"
+        dest: "{{ frontend_dest }}"
+        version: "{{ frontend_version }}"
+
+    - name: Load NVM and install Node.js v14.17.4
+      shell: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm install v14.17.4
+          nvm use v14.17.4
+      args:
+          executable: /bin/bash
+
+    - name: Update .env.production (disable speak-ukrainian)
+      lineinfile:
+        path: "{{ frontend_dest }}/.env.production"
+        regexp: '^.*speak-ukrainian.*$'
+        line: '## speak-ukrainian=disabled'
+
+    - name: Update .env.production (enable localhost)
+      shell: sed -i '/localhost/s/^##//' .env.production
+      args:
+        chdir: "{{ frontend_dest }}"
+
+    - name: Install npm dependencies
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm use v14.17.4
+        npm install
+        npm install ajv
+      args:
+        chdir: "{{ frontend_dest }}"
+        executable: /bin/bash
+
+    - name: Build frontend
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm use v14.17.4
+        npm run build
+      args:
+        chdir: "{{ frontend_dest }}"
+        executable: /bin/bash
+
+    - name: Backup default nginx config
+      shell: mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.back || true
+
+    - name: Write nginx config
+      copy:
+        dest: /etc/nginx/nginx.conf
+        content: |
+          events {
+            worker_connections 1024;
+          }
+
+          http {
+            include       mime.types;
+            server {
+              listen 80;
+              root /usr/share/nginx/html;
+              try_files $uri /index.html;
+
+              location /api {
+                proxy_pass http://localhost:8080;
+              }
+
+              location /oauth2 {
+                proxy_pass http://localhost:8080;
+              }
+
+              location /upload {
+                proxy_pass http://localhost:8080;
+              }
+
+              location /swagger-ui {
+                proxy_pass http://localhost:8080;
+              }
+            }
+          }
+
+    - name: Backup default nginx html
+      shell: mv /usr/share/nginx/html /usr/share/nginx/html.back || true
+
+    - name: Copy build to nginx
+      copy:
+        src: "{{ frontend_dest }}/build/"
+        dest: /usr/share/nginx/html/
+        owner: www-data
+        group: www-data
+        mode: 0755
+
+    - name: Start nginx
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
