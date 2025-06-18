@@ -11,6 +11,10 @@ variable "key_vault_name" {
 variable "db_password" {
   default = "SuperSecure123!"
 }
+variable "project_name" {
+  description = "Project name for DNS labels"
+  type        = string
+}
 variable "postgres_server_name" {}
 variable "postgres_admin_user" {}
 variable "postgres_admin_password" {}

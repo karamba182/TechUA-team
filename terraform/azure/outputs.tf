@@ -21,3 +21,10 @@ output "key_vault_uri" {
 output "postgres_fqdn" {
   value = azurerm_postgresql_flexible_server.main.fqdn
 }    
+output "frontend_fqdn" {
+  value = azurerm_public_ip.frontend_ip.fqdn
+}
+
+output "backend_fqdn" {
+  value = azurerm_public_ip.backend_ip.fqdn
+}
