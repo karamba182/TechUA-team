@@ -61,4 +61,9 @@ build/
 *.zip
 *.tgz
 *.7z
->>>>>>> develop
+
+**/.terraform
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.backup
+>>>>>>> origin/terraform-gcp
