@@ -25,23 +25,29 @@ This directory contains Terraform configuration for deploying TeachUA infrastruc
 
 ## Quick Start
 
-1. **Initialize Terraform**
+1. **Configure variables**
+   ```bash
+   cp terraform.tfvars.example terraform.tfvars
+   # Edit terraform.tfvars with your project values
+   ```
+
+2. **Initialize Terraform**
    ```bash
    terraform init
    ```
 
-2. **Deploy the database**
+3. **Deploy the infrastructure**
    ```bash
    terraform plan
    terraform apply
    ```
 
-3. **Migrate existing data**
+4. **Migrate existing data**
    ```bash
    ./scripts/migrate-database.sh
    ```
 
-4. **Test connection**
+5. **Test connection**
    ```bash
    ./scripts/test-database-connection.sh
    ```
@@ -60,6 +66,8 @@ The database configuration uses `db-f1-micro` which is eligible for GCP's free t
 
 - `main.tf` - Core infrastructure (VMs, network, firewall)
 - `database.tf` - Cloud SQL PostgreSQL configuration
+- `variables.tf` - Input variables definition
+- `terraform.tfvars.example` - Example configuration file
 - `database-migration.md` - Detailed migration guide
 - `scripts/migrate-database.sh` - Automated migration script
 - `scripts/test-database-connection.sh` - Connection testing script

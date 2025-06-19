@@ -16,9 +16,9 @@ terraform {
 }
 
 provider "google" {
-  project = "teachua-6147"
-  region  = "us-central1"
-  zone    = "us-central1-c"
+  project = var.project_id
+  region  = var.region
+  zone    = var.zone
 }
 
 resource "google_compute_network" "vpc_network" {
