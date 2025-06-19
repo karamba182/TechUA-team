@@ -1,0 +1,15 @@
+# Terraform files
+*.tfstate
+*.tfstate.backup
+*.tfplan
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+
+# Backup files
+*.sql
+*_backup_*
+
+# Environment files
+.env
+.env.local 

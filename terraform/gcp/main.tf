@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/google"
       version = "6.8.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5"
+    }
   }
 }
 
@@ -66,8 +70,8 @@ resource "google_compute_instance" "back" {
 
   network_interface {
     network = google_compute_network.vpc_network.name
-    #access_config {
-    #}
+    access_config {
+    }
   }
 }
 
