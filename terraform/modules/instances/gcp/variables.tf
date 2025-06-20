@@ -1,4 +1,5 @@
 variable "compute_network" {}
+variable "google_zone_name" {}
 
 variable "machine_type" {
   default = "f1-micro"

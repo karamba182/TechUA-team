@@ -13,3 +13,7 @@ variable "google_region_name" {
 variable "google_zone_name" {
   default = "us-central1-c"
 }
+
+variable "cloud_platform" {
+  default = "gcp"
+}
