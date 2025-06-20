@@ -47,6 +47,7 @@ module "local_provision" {
   back             = module.instances.back
   front            = module.instances.front
   google_zone_name = var.google_zone_name
+  project_name     = var.project_name
 }
 
 # Database outputs

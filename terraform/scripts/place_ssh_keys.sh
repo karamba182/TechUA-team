@@ -43,4 +43,4 @@ do
   place_public_key $access_key bastion $@
 done
 
-gcloud compute config-ssh
+gcloud compute config-ssh $@

@@ -9,3 +9,4 @@ variable "setup_ssh_gateway_cmd" {
   default = "./scripts/setup_ssh_gateway.sh"
 }
 variable "google_zone_name" {}
+variable "project_name" {}

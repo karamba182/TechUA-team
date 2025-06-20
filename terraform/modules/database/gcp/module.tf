@@ -39,13 +39,9 @@ resource "google_sql_database_instance" "teachua_db" {
     }
 
     ip_configuration {
-      ipv4_enabled = true
+      ipv4_enabled    = true
 
-      authorized_networks {
-        name  = "backend-instance"
-        value = var.backend_ip
-      }
-
+      # Authorize all IPv4 traffic (optional; tighten in production)
       authorized_networks {
         name  = "allow-all"
         value = "0.0.0.0/0"

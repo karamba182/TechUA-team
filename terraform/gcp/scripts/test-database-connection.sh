@@ -16,13 +16,13 @@ NC='\033[0m' # No Color
 
 # Get current directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-TERRAFORM_DIR="$SCRIPT_DIR/.."
+TERRAFORM_DIR="$SCRIPT_DIR/../.."
 
 cd "$TERRAFORM_DIR"
 
-# Check if terraform state exists
-if [ ! -f "terraform.tfstate" ]; then
-    echo -e "${RED}Error: Terraform state not found. Please run 'terraform apply' first.${NC}"
+# Check if terraform is initialized
+if ! terraform state list &>/dev/null; then
+    echo -e "${RED}Error: Terraform state not accessible. Please run 'terraform apply' first.${NC}"
     exit 1
 fi
 
@@ -46,7 +46,8 @@ echo
 
 # Get password from Secret Manager
 echo "Retrieving database password from Secret Manager..."
-DB_PASSWORD=$(gcloud secrets versions access latest --secret="teachua-db-connection" 2>/dev/null | jq -r '.password')
+PROJECT_ID=$(terraform output -json database_connection 2>/dev/null | jq -r '.secret' | cut -d'/' -f2)
+DB_PASSWORD=$(gcloud secrets versions access latest --secret="teachua-db-connection" --project="$PROJECT_ID" 2>/dev/null | jq -r '.password')
 
 if [ -z "$DB_PASSWORD" ] || [ "$DB_PASSWORD" = "null" ]; then
     echo -e "${RED}Error: Could not retrieve password from Secret Manager.${NC}"
