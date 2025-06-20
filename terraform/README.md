@@ -1,75 +1,75 @@
 # TeachUA Terraform Infrastructure
 
-## Модульна структура
+## Modular Structure
 
-Інфраструктура розділена на модулі для кращої організації та повторного використання:
+Infrastructure is organized into modules for better organization and reusability:
 
 ```
 terraform/
-├── main.tf                   # Основна конфігурація
-├── variables.tf              # Головні змінні
-├── terraform.tfvars.example  # Приклад конфігурації
+├── main.tf                   # Main configuration
+├── variables.tf              # Main variables
+├── terraform.tfvars.example  # Configuration example
 └── modules/
-    ├── network/              # VPC та мережа
-    ├── instances/            # VM інстанси
+    ├── network/              # VPC and networking
+    ├── instances/            # VM instances
     ├── database/             # Cloud SQL PostgreSQL
-    ├── firewall/             # Правила firewall
-    └── local_provision/      # SSH налаштування
+    ├── firewall/             # Firewall rules
+    └── local_provision/      # SSH configuration
 ```
 
-## Використання
+## Usage
 
-1. **Налаштування змінних**
+1. **Setup variables**
    ```bash
    cd terraform
    cp terraform.tfvars.example terraform.tfvars
-   # Відредагуйте terraform.tfvars з вашим project_id
+   # Edit terraform.tfvars with your project_id
    ```
 
-2. **Ініціалізація**
+2. **Initialize**
    ```bash
    terraform init
    ```
 
-3. **Розгортання**
+3. **Deploy**
    ```bash
    terraform plan
    terraform apply
    ```
 
-## Модулі
+## Modules
 
 ### network
-- Створює VPC мережу
+- Creates VPC network
 - Outputs: compute_network
 
 ### instances
-- Створює 3 VM: bastion, backend, frontend
+- Creates 3 VMs: bastion, backend, frontend
 - Outputs: bastion, back, front, back_external_ip
 
 ### database
 - Cloud SQL PostgreSQL
-- Автоматична генерація пароля
-- Secret Manager для зберігання credentials
+- Automatic password generation
+- Secret Manager for storing credentials
 - Outputs: database_connection, jdbc_connection_string
 
 ### firewall
-- Відкриває порти: 22, 3001, 3002
+- Opens ports: 22, 3001, 3002
 
 ### local_provision
-- Налаштовує SSH ключі
+- Configures SSH keys
 
-## Конфігурація бази даних
+## Database Configuration
 
-База даних налаштована на free tier:
+Database is configured on free tier:
 - Instance: db-f1-micro
 - Disk: 10GB PD_HDD
 - Region: us-central1
 
-## Видалення інфраструктури
+## Destroying Infrastructure
 
 ```bash
 terraform destroy
 ```
 
-**Примітка**: Для видалення бази даних може знадобитися спочатку вимкнути `deletion_protection`. 
+**Note**: To delete the database, you might need to first disable `deletion_protection`. 
