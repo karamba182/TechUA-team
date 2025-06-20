@@ -31,9 +31,10 @@ module "instances" {
 }
 
 module "database" {
-  source     = "./modules/database/gcp"
-  region     = var.google_region_name
-  backend_ip = module.instances.back_external_ip
+  source      = "./modules/database/gcp"
+  region      = var.google_region_name
+  backend_ip  = module.instances.back_external_ip
+  db_password = var.db_password
 }
 
 module "firewall" {

@@ -13,4 +13,10 @@ variable "google_zone_name" {
   description = "GCP zone"
   type        = string
   default     = "us-central1-c"
+}
+
+variable "db_password" {
+  description = "Database password for TeachUA"
+  type        = string
+  sensitive   = true
 } 

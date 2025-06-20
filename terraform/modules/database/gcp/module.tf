@@ -9,11 +9,8 @@ resource "google_project_service" "secretmanager" {
   disable_on_destroy = false
 }
 
-# Generate secure password for database user
-resource "random_password" "db_password" {
-  length  = 16
-  special = true
-}
+# Using static password from environment variable
+# No random password generation needed
 
 # PostgreSQL Instance
 resource "google_sql_database_instance" "teachua_db" {
@@ -65,7 +62,7 @@ resource "google_sql_database" "teachua" {
 resource "google_sql_user" "teachua_user" {
   name     = var.db_user
   instance = google_sql_database_instance.teachua_db.name
-  password = random_password.db_password.result
+  password = var.db_password
 }
 
 # Store database credentials in Secret Manager
@@ -87,7 +84,7 @@ resource "google_secret_manager_secret_version" "db_connection_string" {
     port     = 5432
     database = google_sql_database.teachua.name
     username = google_sql_user.teachua_user.name
-    password = random_password.db_password.result
+    password = var.db_password
     jdbc_url = "jdbc:postgresql://${google_sql_database_instance.teachua_db.public_ip_address}:5432/${google_sql_database.teachua.name}"
   })
 } 
