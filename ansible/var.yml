@@ -1,3 +1,7 @@
 frontend_repo: "https://github.com/ita-social-projects/TeachUAClient.git"
 frontend_dest: "/opt/frontend"
 frontend_version: "046ce01cfcc5992e473fc5e6030e91c416e86d74"
+
+backend_repo: "https://github.com/ita-social-projects/TeachUA.git"
+backend_dest: "/opt/teachua-backend"
+backend_version: "17bd60e6ecc79bf549c287ad448f20cb164598e2"

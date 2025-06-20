@@ -1,0 +1,123 @@
+- name: Deploy backend app
+  hosts: backend
+  become: yes
+
+  vars_files:
+    - var.yml
+
+  tasks:
+    - name: Ensure required packages are installed
+      apt:
+        name:
+          - git
+          - maven
+          - tomcat9
+          - openjdk-17-jdk
+        state: present
+        update_cache: yes
+
+    - name: Clone backend repository
+      git:
+        repo: "{{ backend_repo }}"
+        dest: "{{ backend_dest }}"
+        version: "{{ backend_version }}"
+        force: yes
+
+    # - name: Load environment variables
+    #   shell: . ./setenv.sh
+    #   args:
+    #     chdir: "{{ backend_dest }}"
+
+    # - name: Build package (1st time, init DB schema)
+    #   shell: |
+    #     mvn package -DskipTests
+    #     java -jar target/dev.war
+    #   args:
+    #     chdir: "{{ backend_dest }}"
+    #   async: 300
+    #   poll: 0
+    #   register: backend_build_job
+
+    # - name: Wait for DB init to complete
+    #   async_status:
+    #     jid: "{{ backend_build_job.ansible_job_id }}"
+    #   register: job_result
+    #   until: job_result.finished
+    #   retries: 10
+    #   delay: 10
+
+    # - name: Enable init mode in config
+    #   lineinfile:
+    #     path: "{{ backend_dest }}/src/main/resources/application-dev.properties"
+    #     regexp: '^#(spring\.sql\.init\.mode=always)'
+    #     line: 'spring.sql.init.mode=always'
+
+    # - name: Clean and rebuild (with init mode)
+    #   shell: |
+    #     mvn clean
+    #     mvn package -DskipTests
+    #     java -jar target/dev.war
+    #   args:
+    #     chdir: "{{ backend_dest }}"
+    #   async: 300
+    #   poll: 0
+    #   register: backend_init_job
+
+    # - name: Wait for init mode build to complete
+    #   async_status:
+    #     jid: "{{ backend_init_job.ansible_job_id }}"
+    #   register: init_job_result
+    #   until: init_job_result.finished
+    #   retries: 10
+    #   delay: 10
+
+    # - name: Revert init mode in config
+    #   lineinfile:
+    #     path: "{{ backend_dest }}/src/main/resources/application-dev.properties"
+    #     regexp: '^(spring\.sql\.init\.mode=always)'
+    #     line: '#spring.sql.init.mode=always'
+
+    # - name: Final clean and build
+    #   shell: |
+    #     mvn clean
+    #     mvn package -DskipTests
+    #   args:
+    #     chdir: "{{ backend_dest }}"
+
+    - name: Install Tomcat
+      apt:
+        name: tomcat9
+        state: present
+        update_cache: yes
+
+    # - name: Build backend with Maven
+    #   shell: mvn clean package -DskipTests
+    #   args:
+    #     chdir: "{{ backend_dest }}"
+
+    - name: Rsync WAR from build server to backend VM
+      synchronize:
+      src: yurii@local-build-server:/path/to/dev.war
+      dest: /var/lib/tomcat9/webapps/dev.war
+      mode: push
+      rsync_path: "sudo rsync"
+
+    - name: Copy dev.war to Tomcat webapps
+      copy:
+        src: "{{ backend_dest }}/target/dev.war"
+        dest: /var/lib/tomcat9/webapps/dev.war
+        remote_src: yes
+        owner: tomcat
+        group: tomcat
+        mode: 0644
+
+    - name: Restart Tomcat
+      systemd:
+        name: tomcat9
+        state: restarted
+
+    - name: Start backend app
+      shell: |
+        nohup java -jar target/dev.war > /var/log/backend.log 2>&1 &
+      args:
+        chdir: "{{ backend_dest }}"
