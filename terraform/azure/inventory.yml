@@ -7,7 +7,9 @@ all:
       ansible_host: 52.169.29.247
       ansible_user: azureuser
       private_ip: 10.0.1.4
+      dns_name: teachua-frontend.northeurope.cloudapp.azure.com
     backend:
       ansible_host: 52.169.24.228
       ansible_user: azureuser
       private_ip: 10.0.1.5
+      dns_name: teachua-backend.northeurope.cloudapp.azure.com
