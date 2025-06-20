@@ -53,6 +53,9 @@ node_modules/
 dist/
 build/
 
+# ignore Any builds
+**/build
+
 # Docker
 *.pid
 
