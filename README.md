@@ -47,7 +47,7 @@ source setenv.sh
 source setenv.sh
 ```
 
-> **Note**: Database IP addresses are managed by Terraform. See [DATABASE-CONFIG.md](DATABASE-CONFIG.md) for configuration details.
+> **Note**: Database IP addresses are managed by Terraform. See [DATABASE-CONFIG.md](DATABASE-CONFIG.md) for details.
 Now, we'll need to initialize our new database:
 ```
 mvn package -DskipTests
