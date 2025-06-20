@@ -20,14 +20,14 @@ resource "google_sql_database_instance" "teachua_db" {
   name                = "${var.db_name}-postgres-instance"
   database_version    = "POSTGRES_15"
   region              = var.region
-  deletion_protection = false
+  deletion_protection = var.deletion_protection
 
   depends_on = [google_project_service.sqladmin]
 
   settings {
     tier = var.db_tier
 
-    disk_size       = var.db_disk_size # GB
+    disk_size       = var.db_disk_size
     disk_type       = var.db_disk_type
     disk_autoresize = false
 
@@ -43,7 +43,7 @@ resource "google_sql_database_instance" "teachua_db" {
 
       authorized_networks {
         name  = "backend-instance"
-        value = google_compute_instance.back.network_interface[0].access_config[0].nat_ip
+        value = var.backend_ip
       }
 
       authorized_networks {
@@ -94,22 +94,4 @@ resource "google_secret_manager_secret_version" "db_connection_string" {
     password = random_password.db_password.result
     jdbc_url = "jdbc:postgresql://${google_sql_database_instance.teachua_db.public_ip_address}:5432/${google_sql_database.teachua.name}"
   })
-}
-
-# Database connection outputs
-output "database_connection" {
-  value = {
-    host     = google_sql_database_instance.teachua_db.public_ip_address
-    port     = 5432
-    database = google_sql_database.teachua.name
-    username = google_sql_user.teachua_user.name
-    secret   = google_secret_manager_secret.db_connection_string.id
-  }
-
-  description = "Database connection details (password stored in Secret Manager)"
-}
-
-output "jdbc_connection_string" {
-  value       = "jdbc:postgresql://${google_sql_database_instance.teachua_db.public_ip_address}:5432/${google_sql_database.teachua.name}"
-  description = "JDBC connection string for the application"
 } 
