@@ -34,9 +34,20 @@ exit
 ```
 Once the database is set up you'll need to load the necessary environment
 variables:
+
+**For Terraform-managed database:**
+```bash
+# After terraform apply
+./scripts/update-database-config.sh
+source setenv.sh
 ```
-. ./setenv.sh
+
+**For manual database setup:**
+```bash
+source setenv.sh
 ```
+
+> **Note**: Database IP addresses are managed by Terraform. See [DATABASE-CONFIG.md](DATABASE-CONFIG.md) for configuration details.
 Now, we'll need to initialize our new database:
 ```
 mvn package -DskipTests

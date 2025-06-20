@@ -2,4 +2,7 @@
 **/.terraform.lock.hcl
 **/terraform.tfstate
 **/terraform.tfstate.backup
+**/terraform.tfvars
 setenv.sh
+database-config.env
+setenv.sh.backup.*
