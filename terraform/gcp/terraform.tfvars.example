@@ -1,0 +1,11 @@
+# GCP Project Configuration
+project_id = "your-gcp-project-id"
+region     = "us-central1"
+zone       = "us-central1-c"
+
+# Database Configuration
+db_tier      = "db-f1-micro"  # Free tier eligible
+db_disk_size = 10             # GB
+db_disk_type = "PD_HDD"       # PD_SSD for better performance
+db_name      = "teachua"
+db_user      = "teachua_user" 

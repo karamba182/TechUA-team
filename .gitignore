@@ -9,6 +9,8 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 .terraform.lock.hcl
+*.tfplan
+!terraform.tfvars.example
 
 # Ansible
 *.retry
@@ -61,4 +63,13 @@ build/
 *.zip
 *.tgz
 *.7z
->>>>>>> develop
+
+**/.terraform
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.backup
+setenv.sh
+
+# Backup files
+*.sql
+*_backup_*

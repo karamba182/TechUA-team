@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/google"
       version = "6.8.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5"
+    }
   }
 }
 
@@ -31,10 +35,12 @@ module "gcp_instances" {
   google_zone_name = var.google_zone_name
 }
 
-#module "gcp_database" {
-#count = var.cloud_platform == "gcp" ? 1 : 0
-#source = "./modules/database/gcp"
-#}
+module "gcp_database" {
+  source     = "./modules/database/gcp"
+  count      = var.cloud_platform == "gcp" ? 1 : 0
+  region     = var.google_region_name
+  backend_ip = module.gcp_instances[0].back_external_ip
+}
 
 module "gcp_proxy" {
   source         = "./modules/proxy/gcp"
