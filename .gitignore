@@ -61,4 +61,5 @@ build/
 *.zip
 *.tgz
 *.7z
->>>>>>> develop
+
+*hsecret*

@@ -1,0 +1,10 @@
+plugin: gcp_compute
+projects:
+  - teachua-6147
+auth_kind: serviceaccount
+service_account_file: gcp_client_hsecret.json
+strict: true
+hostnames: name
+keyed_groups:
+  - key: labels
+    prefix: gcp

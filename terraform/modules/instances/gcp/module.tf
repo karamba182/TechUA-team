@@ -10,6 +10,7 @@ resource "google_compute_instance_template" "back_temp" {
   }
   labels = {
     managed-by-cnrm = "true"
+    group_instance = "back-group"
   }
   machine_type = var.machine_type
   metadata = {
@@ -46,7 +47,7 @@ resource "google_compute_instance_group_manager" "back_group" {
     instance_template = google_compute_instance_template.back_temp.id
     name              = "primary"
   }
-  base_instance_name = "back-"
+  base_instance_name = "back"
   target_size        = 1
 }
 

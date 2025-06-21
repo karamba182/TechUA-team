@@ -1,0 +1,25 @@
+- name: Check backend's work
+  hosts: gcp_group_instance_back_group
+  become: yes
+
+  gather_facts: true
+  
+  vars:
+    service_account_file: gcp_client_hsecret.json
+    ansible_ssh_common_args: '-i ~/.ssh/google_compute_engine -J devops@bastion.us-central1-a.teachua-6147'
+    projects: 
+      - teachua-6147
+    auth_kind: serviceaccount
+
+  tasks:
+    - name: install httpd
+      apt:
+        update_cache: yes
+        name: apache2
+        state: present
+    - name: start apache service
+      service:
+        name: apache2
+        state: started
+    - name: change the webpage to success
+      shell: echo Success'!!' > /var/www/html/index.html

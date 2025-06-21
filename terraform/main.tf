@@ -18,6 +18,12 @@ provider "google" {
 }
 
 # GCP
+module "gcp_meta" {
+  source       = "./modules/meta/gcp"
+  count        = var.cloud_platform == "gcp" ? 1 : 0
+  project_name = var.project_name
+}
+
 module "gcp_network" {
   source             = "./modules/network/gcp"
   count              = var.cloud_platform == "gcp" ? 1 : 0
