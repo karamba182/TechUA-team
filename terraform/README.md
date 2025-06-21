@@ -66,6 +66,14 @@ Database is configured on free tier:
 - Disk: 10GB PD_HDD
 - Region: us-central1
 
+## Troubleshooting
+
+### SSH Key Deployment Issues
+If SSH provisioning fails during `terraform apply`:
+```bash
+terraform state rm module.local_provision.null_resource.populate_ssh_keys
+terraform apply
+```
 ## Destroying Infrastructure
 
 ```bash
