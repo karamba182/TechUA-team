@@ -95,5 +95,10 @@ do
   fi
 done
 
+echo "Updating SSH config..."
+# Set the gcloud context before running config-ssh
+gcloud config set compute/zone "$ZONE"
+gcloud config set core/project "$PROJECT"
+gcloud compute config-ssh
+
 echo "SSH keys deployment completed successfully!"
-echo "Note: You can manually run 'gcloud compute config-ssh' to update your SSH config if needed."

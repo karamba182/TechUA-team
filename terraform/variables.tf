@@ -1,15 +1,6 @@
-variable "bucket_name" {
-  default = "teachua-tfstate"
-}
-
-variable "cloud_platform" {
-  default = "gcp"
-}
-
 variable "project_name" {
   description = "GCP project ID"
   type        = string
-  default     = "teachua-6147"
 }
 
 variable "google_region_name" {
@@ -23,3 +14,9 @@ variable "google_zone_name" {
   type        = string
   default     = "us-central1-c"
 }
+
+variable "db_password" {
+  description = "Database password for TeachUA"
+  type        = string
+  sensitive   = true
+} 

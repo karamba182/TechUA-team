@@ -7,10 +7,7 @@ output "back" {
 output "front" {
   value = google_compute_instance.front
 }
-output "back_group" {
-  value = google_compute_instance_group_manager.back_group
-}
 output "back_external_ip" {
-  value       = google_compute_instance.back.network_interface.0.network_ip
-  description = "External IP of backend instance"
+  value       = google_compute_instance.back.network_interface[0].network_ip
+  description = "Internal IP of backend instance"
 }

@@ -1,75 +1,8 @@
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.*
-crash.log
-*.tfvars
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-.terraform.lock.hcl
-*.tfplan
-!terraform.tfvars.example
-
-# Ansible
-*.retry
-*.log
-*.tmp
-inventory/*
-!inventory/hosts.example
-vault_pass.txt
-*.vault
-*.cfg~
-
-# Environment files
-.env
-.env.*
-*.env
-
-# Common temporary and backup files
-*.swp
-*.swo
-*.bak
-*.backup
-*.orig
-*.old
-*.out
-
-# macOS system files
-.DS_Store
-
-# IDE and editor settings
-.vscode/
-.idea/
-*.code-workspace
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Node.js
-node_modules/
-dist/
-build/
-
-# Docker
-*.pid
-
-# Archives
-*.tar.gz
-*.zip
-*.tgz
-*.7z
-
 **/.terraform
 **/.terraform.lock.hcl
 **/terraform.tfstate
 **/terraform.tfstate.backup
+**/terraform.tfvars
 setenv.sh
-
-# Backup files
-*.sql
-*_backup_*
+database-config.env
+setenv.sh.backup.*
