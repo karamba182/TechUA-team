@@ -60,8 +60,6 @@ module "gcp_local_provision" {
   source           = "./modules/local_provision/gcp"
   count            = var.cloud_platform == "gcp" ? 1 : 0
   bastion          = module.gcp_instances[0].bastion
-  back             = module.gcp_instances[0].back
-  front            = module.gcp_instances[0].front
   google_zone_name = var.google_zone_name
 }
 

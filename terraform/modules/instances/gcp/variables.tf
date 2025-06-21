@@ -2,13 +2,6 @@ variable "compute_network" {}
 variable "backend_subnetwork" {}
 variable "google_zone_name" {}
 
-variable "machine_type" {
-  default = "f1-micro"
-}
-variable "init_image" {
-  default = "debian-cloud/debian-11"
-}
-
 variable "bastion_name" {
   default = "bastion"
 }
