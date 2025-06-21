@@ -1,5 +1,9 @@
-output "global_address" {
-  value = module.gcp_network[0].global_address.address
+output "global_address_back" {
+  value = module.gcp_network[0].global_address_back.address
+}
+
+output "global_address_front" {
+  value = module.gcp_network[0].global_address_front.address
 }
 
 output "bastion_ip" {

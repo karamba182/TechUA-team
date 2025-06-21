@@ -44,10 +44,11 @@ module "gcp_instances" {
 #}
 
 module "gcp_proxy" {
-  source         = "./modules/proxy/gcp"
-  count          = var.cloud_platform == "gcp" ? 1 : 0
-  back_group     = module.gcp_instances[0].back_group
-  global_address = module.gcp_network[0].global_address
+  source               = "./modules/proxy/gcp"
+  count                = var.cloud_platform == "gcp" ? 1 : 0
+  back_group           = module.gcp_instances[0].back_group
+  global_address_back  = module.gcp_network[0].global_address_back
+  global_address_front = module.gcp_network[0].global_address_front
 }
 
 module "gcp_firewall" {

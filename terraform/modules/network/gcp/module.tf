@@ -9,7 +9,12 @@ resource "google_compute_subnetwork" "backend" {
   network       = google_compute_network.vpc_network.id
 }
 
-resource "google_compute_global_address" "default" {
-  name       = "proxy-access"
+resource "google_compute_global_address" "back" {
+  name       = "proxy-access-back"
+  ip_version = "IPV4"
+}
+
+resource "google_compute_global_address" "front" {
+  name       = "proxy-access-front"
   ip_version = "IPV4"
 }
