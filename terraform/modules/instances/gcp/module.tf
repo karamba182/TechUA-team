@@ -20,8 +20,8 @@ resource "google_compute_instance_template" "back_temp" {
     access_config {
       network_tier = "PREMIUM"
     }
-    network    = "global/networks/terraform-network"
-    subnetwork = "regions/us-central1/subnetworks/backend-subnet"
+    network    = var.compute_network.self_link
+    subnetwork = var.backend_subnetwork.self_link
   }
   region = "us-central1"
   scheduling {

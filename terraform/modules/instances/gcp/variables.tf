@@ -1,4 +1,5 @@
 variable "compute_network" {}
+variable "backend_subnetwork" {}
 variable "google_zone_name" {}
 
 variable "machine_type" {

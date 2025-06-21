@@ -31,10 +31,11 @@ module "gcp_network" {
 }
 
 module "gcp_instances" {
-  source           = "./modules/instances/gcp"
-  count            = var.cloud_platform == "gcp" ? 1 : 0
-  compute_network  = module.gcp_network[0].compute_network
-  google_zone_name = var.google_zone_name
+  source             = "./modules/instances/gcp"
+  count              = var.cloud_platform == "gcp" ? 1 : 0
+  compute_network    = module.gcp_network[0].compute_network
+  backend_subnetwork = module.gcp_network[0].backend_subnetwork
+  google_zone_name   = var.google_zone_name
 }
 
 #module "gcp_database" {
