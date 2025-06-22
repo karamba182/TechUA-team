@@ -17,3 +17,10 @@ variable "google_zone_name" {
 variable "cloud_platform" {
   default = "gcp"
 }
+
+# Database variables
+variable "db_password" {
+  description = "Database password"
+  type        = string
+  sensitive   = true
+}
