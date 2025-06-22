@@ -3,7 +3,7 @@ resource "google_compute_health_check" "back" {
   check_interval_sec = 5
   healthy_threshold  = 2
   http_health_check {
-    port               = 80
+    port               = 8080
     port_specification = "USE_FIXED_PORT"
     proxy_header       = "NONE"
     request_path       = "/"
@@ -54,7 +54,7 @@ resource "google_compute_health_check" "front" {
   check_interval_sec = 5
   healthy_threshold  = 2
   http_health_check {
-    port               = 8080
+    port               = 80
     port_specification = "USE_FIXED_PORT"
     proxy_header       = "NONE"
     request_path       = "/"
@@ -73,7 +73,7 @@ resource "google_compute_backend_service" "front" {
   session_affinity                = "NONE"
   timeout_sec                     = 30
   backend {
-    group           = var.back_group.instance_group
+    group           = var.front_group.instance_group
     balancing_mode  = "UTILIZATION"
     capacity_scaler = 1.0
   }

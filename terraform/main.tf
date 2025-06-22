@@ -54,6 +54,7 @@ module "gcp_proxy" {
   source               = "./modules/proxy/gcp"
   count                = var.cloud_platform == "gcp" ? 1 : 0
   back_group           = module.gcp_instances[0].back_group
+  front_group          = module.gcp_instances[0].front_group
   global_address_back  = module.gcp_network[0].global_address_back
   global_address_front = module.gcp_network[0].global_address_front
 }
