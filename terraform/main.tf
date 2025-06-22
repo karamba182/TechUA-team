@@ -42,14 +42,13 @@ module "gcp_instances" {
   google_zone_name   = var.google_zone_name
 }
 
-# Temporarily commented until backend instance is properly configured
-#module "gcp_database" {
-#  source      = "./modules/database/gcp"
-#  count       = var.cloud_platform == "gcp" ? 1 : 0
-#  region      = var.google_region_name
-#  backend_ip  = module.gcp_instances[0].backend_ip
-#  db_password = var.db_password
-#}
+module "gcp_database" {
+  source      = "./modules/database/gcp"
+  count       = var.cloud_platform == "gcp" ? 1 : 0
+  region      = var.google_region_name
+  backend_ip  = module.gcp_instances[0].backend_ip
+  db_password = var.db_password
+}
 
 module "gcp_proxy" {
   source               = "./modules/proxy/gcp"
