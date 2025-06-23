@@ -18,7 +18,8 @@ inventory/*
 !inventory/hosts.example
 vault_pass.txt
 *.vault
-*.cfg~
+.cfg~
+.sql
 
 # Environment files
 .env
