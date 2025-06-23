@@ -36,3 +36,36 @@ variable "db_password_secret_name" {
   type        = string
   default     = "db-password"
 }
+
+variable "postgres_admin_user_secret_name" {
+  description = "Name of secret for password db in Key Vault"
+  type        = string
+  default     = "pgadmin"
+}
+
+variable "postgres_admin_user_value" {
+  description = "Value of db password"
+  type        = string
+}
+
+variable "postgres_admin_password_secret_name" {
+  description = "Name of secret for password db in Key Vault"
+  type        = string
+  default     = "pg-pass"
+}
+
+variable "postgres_admin_password_value" {
+  description = "Value of db password"
+  type        = string
+}
+
+variable "postgres_db_name_value" {
+  description = "Value of db password"
+  type        = string
+}
+
+variable "postgres_db_name_secret_name" {
+  description = "Name of secret for password db in Key Vault"
+  type        = string
+  default     = "db-name"
+}

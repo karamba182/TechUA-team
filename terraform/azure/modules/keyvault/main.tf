@@ -30,3 +30,25 @@ resource "azurerm_key_vault_secret" "db_pass" {
   key_vault_id = azurerm_key_vault.main.id
   depends_on   = [azurerm_key_vault_access_policy.current_user]
 }
+
+resource "azurerm_key_vault_secret" "postgres_db_name" {
+  name         = var.postgres_db_name_secret_name
+  value        = var.postgres_db_name_value
+  key_vault_id = azurerm_key_vault.main.id
+  depends_on   = [azurerm_key_vault_access_policy.current_user]
+}
+
+resource "azurerm_key_vault_secret" "postgres_admin_user" {
+  name         = var.postgres_admin_user_secret_name
+  value        = var.postgres_admin_user_value
+  key_vault_id = azurerm_key_vault.main.id
+  depends_on   = [azurerm_key_vault_access_policy.current_user]
+}
+
+resource "azurerm_key_vault_secret" "postgres_admin_password" {
+  name         = var.postgres_admin_password_secret_name
+  value        = var.postgres_admin_password_value
+  key_vault_id = azurerm_key_vault.main.id
+  depends_on   = [azurerm_key_vault_access_policy.current_user]
+}
+

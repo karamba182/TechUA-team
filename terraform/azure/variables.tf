@@ -40,7 +40,6 @@ variable "postgres_admin_password" {
 variable "postgres_db_name" {
   description = "Name of db PostgreSQL"
 }
-
 variable "vnet_name" { 
   type = string 
   default = "yura-vnet" 
