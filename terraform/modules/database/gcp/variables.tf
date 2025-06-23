@@ -16,7 +16,7 @@ variable "db_disk_size" {
 }
 
 variable "db_disk_type" {
-  description = "Cloud SQL disk type (PD_SSD or PD_HDD)"
+  description = "Cloud SQL disk type"
   type        = string
   default     = "PD_HDD"
 }

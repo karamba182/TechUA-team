@@ -9,9 +9,6 @@ resource "google_project_service" "secretmanager" {
   disable_on_destroy = false
 }
 
-# Using static password from environment variable
-# No random password generation needed
-
 # PostgreSQL Instance
 resource "google_sql_database_instance" "teachua_db" {
   name                = "${var.db_name}-postgres-instance"
@@ -38,7 +35,7 @@ resource "google_sql_database_instance" "teachua_db" {
     ip_configuration {
       ipv4_enabled    = true
 
-      # Authorize all IPv4 traffic (optional; tighten in production)
+      # Authorize all IPv4 traffic
       authorized_networks {
         name  = "allow-all"
         value = "0.0.0.0/0"
