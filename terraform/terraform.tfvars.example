@@ -1,4 +1,0 @@
-# GCP Project Configuration
-project_name       = "your-gcp-project-id"
-google_region_name = "us-central1"
-google_zone_name   = "us-central1-c" 
