@@ -1,0 +1,14 @@
+db_host: ""
+db_port: 5432
+postgres_admin_user: ""
+postgres_admin_password: ""
+  # Application database defaults
+db_name: teachua
+db_user: pmp2025
+db_password: Pmp#2025
+dump_file: teachua_dump.sql
+  # # Required packages on control host
+packages:
+  - postgresql-client
+  - python3-psycopg2
+

@@ -1,0 +1,16 @@
+- hosts: postgres_flexible
+  connection: local
+  gather_facts: false
+  vars:
+                  # Azure Flexible Server connection
+    db_host: roma-postgres-server-dev182.postgres.database.azure.com
+    db_port: 5432
+    postgres_admin_user: "{{ lookup('azure.azcollection.azure_keyvault_secret', 'pgadmin', vault_url='https://roma-kv-dev3.vault.azure.net', auth_source='cli') }}"
+    postgres_admin_password: "{{ lookup('azure.azcollection.azure_keyvault_secret', 'pg-pass', vault_url='https://roma-kv-dev3.vault.azure.net', auth_source='cli') }}"
+    db_name: "{{ lookup('azure.azcollection.azure_keyvault_secret', 'db-name', vault_url='https://roma-kv-dev3.vault.azure.net', auth_source='cli') }}"
+    db_user: pmp2025
+    db_password: "{{ lookup('azure.azcollection.azure_keyvault_secret', 'db-password', vault_url='https://roma-kv-dev3.vault.azure.net', auth_source='cli') }}"
+    dump_file: teachua_dump.sql
+  roles:
+    - postgresql
+

@@ -16,92 +16,112 @@ terraform {
 }
 
 provider "google" {
-  project = var.project_id
-  region  = var.region
-  zone    = var.zone
+  project = var.project_name
+  region  = var.google_region_name
+  zone    = var.google_zone_name
 }
 
-resource "google_compute_network" "vpc_network" {
-  name = "terraform-network"
+# GCP
+module "gcp_network" {
+  source             = "./modules/network/gcp"
+  count              = var.cloud_platform == "gcp" ? 1 : 0
+  google_region_name = var.google_region_name
 }
 
-resource "google_compute_instance" "bastion" {
-  name         = "bastion"
-  machine_type = "f1-micro"
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = google_compute_network.vpc_network.name
-    access_config {
-    }
-  }
+module "gcp_instances" {
+  source           = "./modules/instances/gcp"
+  count            = var.cloud_platform == "gcp" ? 1 : 0
+  compute_network  = module.gcp_network[0].compute_network
+  google_zone_name = var.google_zone_name
 }
 
-resource "google_compute_firewall" "default" {
-  name    = "main-firewall"
-  network = google_compute_network.vpc_network.name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22", "3001", "3002"]
-  }
-
-  allow {
-    protocol = "icmp"
-  }
-
-  source_ranges = ["0.0.0.0/0"]
+module "gcp_database" {
+  source     = "./modules/database/gcp"
+  count      = var.cloud_platform == "gcp" ? 1 : 0
+  region     = var.google_region_name
+  backend_ip = module.gcp_instances[0].back_external_ip
 }
 
-resource "google_compute_instance" "back" {
-  name         = "back"
-  machine_type = "f1-micro"
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = google_compute_network.vpc_network.name
-    access_config {
-    }
-  }
+module "gcp_proxy" {
+  source         = "./modules/proxy/gcp"
+  count          = var.cloud_platform == "gcp" ? 1 : 0
+  back_group     = module.gcp_instances[0].back_group
+  global_address = module.gcp_network[0].global_address
 }
 
-resource "google_compute_instance" "front" {
-  name         = "front"
-  machine_type = "f1-micro"
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = google_compute_network.vpc_network.name
-    #access_config {
-    #}
-  }
+module "gcp_firewall" {
+  source          = "./modules/firewall/gcp"
+  count           = var.cloud_platform == "gcp" ? 1 : 0
+  compute_network = module.gcp_network[0].compute_network
 }
 
-resource "null_resource" "populate_ssh_keys" {
-  depends_on = [
-    google_compute_instance.bastion,
-    google_compute_instance.back,
-    google_compute_instance.front
-  ]
-  provisioner "local-exec" {
-    command = "./scripts/place_ssh_keys.sh"
-  }
-  provisioner "local-exec" {
-    command = "./scripts/setup_ssh_gateway.sh"
-  }
+module "gcp_local_provision" {
+  source           = "./modules/local_provision/gcp"
+  count            = var.cloud_platform == "gcp" ? 1 : 0
+  bastion          = module.gcp_instances[0].bastion
+  back             = module.gcp_instances[0].back
+  front            = module.gcp_instances[0].front
+  google_zone_name = var.google_zone_name
+}
+
+# AWS
+module "aws_network" {
+  source = "./modules/network/aws"
+  count  = var.cloud_platform == "aws" ? 1 : 0
+}
+
+module "aws_instances" {
+  source = "./modules/instances/aws"
+  count  = var.cloud_platform == "aws" ? 1 : 0
+}
+
+#module "aws_database" {
+#count = var.cloud_platform == "aws" ? 1 : 0
+#source = "./modules/database/aws"
+#}
+
+module "aws_proxy" {
+  source = "./modules/proxy/aws"
+  count  = var.cloud_platform == "aws" ? 1 : 0
+}
+
+module "aws_firewall" {
+  source = "./modules/firewall/aws"
+  count  = var.cloud_platform == "aws" ? 1 : 0
+}
+
+module "aws_local_provision" {
+  source = "./modules/local_provision/aws"
+  count  = var.cloud_platform == "aws" ? 1 : 0
+}
+
+# AZURE
+module "azure_network" {
+  source = "./modules/network/azure"
+  count  = var.cloud_platform == "azure" ? 1 : 0
+}
+
+module "azure_instances" {
+  source = "./modules/instances/azure"
+  count  = var.cloud_platform == "azure" ? 1 : 0
+}
+
+#module "azure_database" {
+#count = var.cloud_platform == "azure" ? 1 : 0
+#source = "./modules/database/azure"
+#}
+
+module "azure_proxy" {
+  source = "./modules/proxy/azure"
+  count  = var.cloud_platform == "azure" ? 1 : 0
+}
+
+module "azure_firewall" {
+  source = "./modules/firewall/azure"
+  count  = var.cloud_platform == "azure" ? 1 : 0
+}
+
+module "azure_local_provision" {
+  source = "./modules/local_provision/azure"
+  count  = var.cloud_platform == "azure" ? 1 : 0
 }
