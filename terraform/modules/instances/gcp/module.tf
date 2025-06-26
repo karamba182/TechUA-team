@@ -21,7 +21,7 @@ resource "google_compute_instance_template" "back_temp" {
       network_tier = "PREMIUM"
     }
     network    = var.compute_network.self_link
-    subnetwork = var.backend_subnetwork.self_link
+    subnetwork = var.back_subnetwork.self_link
   }
   region = "us-central1"
   scheduling {
@@ -59,7 +59,7 @@ resource "google_compute_instance_template" "front_temp" {
       network_tier = "PREMIUM"
     }
     network    = var.compute_network.self_link
-    subnetwork = var.backend_subnetwork.self_link
+    subnetwork = var.front_subnetwork.self_link
   }
   region = "us-central1"
   scheduling {

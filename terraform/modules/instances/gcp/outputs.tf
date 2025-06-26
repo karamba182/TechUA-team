@@ -10,6 +10,6 @@ output "front_group" {
 
 # For database authorization - we'll use a placeholder since we have managed groups
 output "backend_ip" {
-  value = "0.0.0.0/0"  # Allow all IPs for now since we have managed instance groups
+  value       = "0.0.0.0/0" # Allow all IPs for now since we have managed instance groups
   description = "Backend IP for database authorization - currently open to all"
 }

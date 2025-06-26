@@ -1,9 +1,5 @@
-output "global_address_back" {
-  value = module.gcp_network[0].global_address_back.address
-}
-
-output "global_address_front" {
-  value = module.gcp_network[0].global_address_front.address
+output "global_address" {
+  value = module.gcp_network[0].global_address.address
 }
 
 output "bastion_ip" {
@@ -11,17 +7,18 @@ output "bastion_ip" {
 }
 
 # Database outputs for GCP
-output "database_connection" {
-  value = var.cloud_platform == "gcp" ? (
-    length(module.gcp_database) > 0 ? module.gcp_database[0].database_connection : null
-  ) : null
-  description = "Database connection details"
-  sensitive   = true
-}
-
-output "jdbc_connection_string" {
-  value = var.cloud_platform == "gcp" ? (
-    length(module.gcp_database) > 0 ? module.gcp_database[0].jdbc_connection_string : null
-  ) : null
-  description = "JDBC connection string"
-}
+#TODO:uncomment
+#output "database_connection" {
+#  value = var.cloud_platform == "gcp" ? (
+#    length(module.gcp_database) > 0 ? module.gcp_database[0].database_connection : null
+#  ) : null
+#  description = "Database connection details"
+#  sensitive   = true
+#}
+#
+#output "jdbc_connection_string" {
+#  value = var.cloud_platform == "gcp" ? (
+#    length(module.gcp_database) > 0 ? module.gcp_database[0].jdbc_connection_string : null
+#  ) : null
+#  description = "JDBC connection string"
+#}

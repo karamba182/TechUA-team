@@ -2,14 +2,14 @@ output "compute_network" {
   value = google_compute_network.vpc_network
 }
 
-output "backend_subnetwork" {
-  value = google_compute_subnetwork.backend
+output "back_subnetwork" {
+  value = google_compute_subnetwork.back
 }
 
-output "global_address_back" {
-  value = google_compute_global_address.back
+output "front_subnetwork" {
+  value = google_compute_subnetwork.front
 }
 
-output "global_address_front" {
-  value = google_compute_global_address.front
+output "global_address" {
+  value = google_compute_global_address.proxy
 }

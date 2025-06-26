@@ -2,11 +2,19 @@ variable "network_name" {
   default = "terraform-network"
 }
 
-variable "backend_subnetwork_name" {
-  default = "backend-subnet"
+variable "back_subnetwork_name" {
+  default = "back-subnet"
 }
 
-variable "backend_ip_range" {
+variable "back_ip_range" {
+  default = "10.2.0.0/16"
+}
+
+variable "front_subnetwork_name" {
+  default = "front-subnet"
+}
+
+variable "front_ip_range" {
   default = "10.1.0.0/16"
 }
 

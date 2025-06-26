@@ -43,9 +43,9 @@ resource "google_compute_global_forwarding_rule" "back" {
   name                  = "back-http-content-rule"
   ip_protocol           = "TCP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
-  port_range            = "8080-8080"
+  port_range            = "8080"
   target                = google_compute_target_http_proxy.back.id
-  ip_address            = var.global_address_back.id
+  ip_address            = var.global_address.id
 }
 
 ## front
@@ -93,7 +93,7 @@ resource "google_compute_global_forwarding_rule" "front" {
   name                  = "front-http-content-rule"
   ip_protocol           = "TCP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
-  port_range            = "80-80"
+  port_range            = "80"
   target                = google_compute_target_http_proxy.front.id
-  ip_address            = var.global_address_front.id
+  ip_address            = var.global_address.id
 }

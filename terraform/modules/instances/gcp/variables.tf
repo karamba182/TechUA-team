@@ -1,5 +1,6 @@
 variable "compute_network" {}
-variable "backend_subnetwork" {}
+variable "back_subnetwork" {}
+variable "front_subnetwork" {}
 variable "google_zone_name" {}
 
 variable "bastion_name" {

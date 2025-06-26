@@ -35,11 +35,12 @@ module "gcp_network" {
 }
 
 module "gcp_instances" {
-  source             = "./modules/instances/gcp"
-  count              = var.cloud_platform == "gcp" ? 1 : 0
-  compute_network    = module.gcp_network[0].compute_network
-  backend_subnetwork = module.gcp_network[0].backend_subnetwork
-  google_zone_name   = var.google_zone_name
+  source           = "./modules/instances/gcp"
+  count            = var.cloud_platform == "gcp" ? 1 : 0
+  compute_network  = module.gcp_network[0].compute_network
+  back_subnetwork  = module.gcp_network[0].back_subnetwork
+  front_subnetwork = module.gcp_network[0].front_subnetwork
+  google_zone_name = var.google_zone_name
 }
 
 module "gcp_database" {
@@ -51,12 +52,11 @@ module "gcp_database" {
 }
 
 module "gcp_proxy" {
-  source               = "./modules/proxy/gcp"
-  count                = var.cloud_platform == "gcp" ? 1 : 0
-  back_group           = module.gcp_instances[0].back_group
-  front_group          = module.gcp_instances[0].front_group
-  global_address_back  = module.gcp_network[0].global_address_back
-  global_address_front = module.gcp_network[0].global_address_front
+  source         = "./modules/proxy/gcp"
+  count          = var.cloud_platform == "gcp" ? 1 : 0
+  back_group     = module.gcp_instances[0].back_group
+  front_group    = module.gcp_instances[0].front_group
+  global_address = module.gcp_network[0].global_address
 }
 
 module "gcp_firewall" {
