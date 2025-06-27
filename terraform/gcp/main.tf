@@ -49,6 +49,7 @@ module "gcp_database" {
   region      = var.google_region_name
   backend_ip  = module.gcp_instances[0].backend_ip
   db_password = var.db_password
+  db_user     = var.db_user
 }
 
 module "gcp_proxy" {

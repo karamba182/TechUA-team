@@ -3,7 +3,7 @@ resource "google_compute_health_check" "back" {
   check_interval_sec = 5
   healthy_threshold  = 2
   http_health_check {
-    port               = 8080
+    port               = 3001
     port_specification = "USE_FIXED_PORT"
     proxy_header       = "NONE"
     request_path       = "/"
