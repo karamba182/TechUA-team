@@ -9,12 +9,6 @@ resource "google_project_service" "secretmanager" {
   disable_on_destroy = false
 }
 
-# Generate secure password for database user
-resource "random_password" "db_password" {
-  length  = 16
-  special = true
-}
-
 # PostgreSQL Instance
 resource "google_sql_database_instance" "teachua_db" {
   name                = "${var.db_name}-postgres-instance"
@@ -41,11 +35,7 @@ resource "google_sql_database_instance" "teachua_db" {
     ip_configuration {
       ipv4_enabled = true
 
-      authorized_networks {
-        name  = "backend-instance"
-        value = var.backend_ip
-      }
-
+      # Authorize all IPv4 traffic
       authorized_networks {
         name  = "allow-all"
         value = "0.0.0.0/0"
@@ -69,7 +59,7 @@ resource "google_sql_database" "teachua" {
 resource "google_sql_user" "teachua_user" {
   name     = var.db_user
   instance = google_sql_database_instance.teachua_db.name
-  password = random_password.db_password.result
+  password = var.db_password
 }
 
 # Store database credentials in Secret Manager
@@ -91,7 +81,7 @@ resource "google_secret_manager_secret_version" "db_connection_string" {
     port     = 5432
     database = google_sql_database.teachua.name
     username = google_sql_user.teachua_user.name
-    password = random_password.db_password.result
+    password = var.db_password
     jdbc_url = "jdbc:postgresql://${google_sql_database_instance.teachua_db.public_ip_address}:5432/${google_sql_database.teachua.name}"
   })
-} 
+}

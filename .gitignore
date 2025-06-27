@@ -64,6 +64,7 @@ build/
 *.tgz
 *.7z
 
+
 **/.terraform
 **/.terraform.lock.hcl
 **/terraform.tfstate
@@ -73,3 +74,5 @@ setenv.sh
 # Backup files
 *.sql
 *_backup_*
+
+*hsecret*
