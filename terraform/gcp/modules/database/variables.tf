@@ -16,7 +16,7 @@ variable "db_disk_size" {
 }
 
 variable "db_disk_type" {
-  description = "Cloud SQL disk type (PD_SSD or PD_HDD)"
+  description = "Cloud SQL disk type"
   type        = string
   default     = "PD_HDD"
 }
@@ -42,4 +42,10 @@ variable "deletion_protection" {
 variable "backend_ip" {
   description = "Backend instance IP for authorized networks"
   type        = string
-} 
+}
+
+variable "db_password" {
+  description = "Static database password from environment"
+  type        = string
+  sensitive   = true
+}
